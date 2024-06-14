@@ -1,59 +1,146 @@
-version: "3.7"
-
 services:
 
-  mrs-server-1:
-    env_file:
-      - ./docker/mysql-server.env
-    image: mysql/mysql-server:8.0.12
-    user: root
+  # docker exec -it mysql-server-1 bash  
+  mysql-server-1:
+    image: mysql/mysql-server
+    container_name: mysql-server-1
+    environment: 
+      MYSQL_ROOT_PASSWORD: 'password'
+      MYSQL_ROOT_HOST: '%'
+    healthcheck:
+      test: ["CMD", "/healthcheck.sh"]
+      timeout: 20s
+      retries: 10
     ports:
       - "3301:3306"
-    command: ["mysqld","--server_id=1","--binlog_checksum=NONE","--gtid_mode=ON","--enforce_gtid_consistency=ON","--log_bin","--log_slave_updates=ON","--master_info_repository=TABLE","--relay_log_info_repository=TABLE","--transaction_write_set_extraction=XXHASH64","--user=root","--skip-host-cache","--skip-name-resolve", "--default_authentication_plugin=mysql_native_password"]
+#    volumes: 
+#      - ./data/server-1:/var/lib/mysql      
+    restart: always
+    command: [
+      "mysqld",
+      "--server_id=1",
+      "--mysqlx=ON",
+      "--binlog_checksum=NONE",
+      "--gtid_mode=ON",
+      "--enforce_gtid_consistency=ON",
+      "--log_bin",
+      "--log_slave_updates=ON",
+      "--master_info_repository=TABLE",
+      "--relay_log_info_repository=TABLE",
+      "--transaction_write_set_extraction=XXHASH64",
+      "--user=root",
+      "--skip-host-cache",
+      "--skip-name-resolve", 
+      "--default_authentication_plugin=mysql_native_password",
+      "--binlog_transaction_dependency_tracking=WRITESET"]
 
-  mrs-server-2:
-    env_file:
-      - ./docker/mysql-server.env
-    image: mysql/mysql-server:8.0.12
-    user: root
+  mysql-server-2:
+    image: mysql/mysql-server
+    container_name: mysql-server-2
+    environment: 
+      MYSQL_ROOT_PASSWORD: 'password'
+      MYSQL_ROOT_HOST: '%'
+    healthcheck:
+      test: ["CMD", "/healthcheck.sh"]
+      timeout: 20s
+      retries: 10
     ports:
       - "3302:3306"
-    command: ["mysqld","--server_id=2","--binlog_checksum=NONE","--gtid_mode=ON","--enforce_gtid_consistency=ON","--log_bin","--log_slave_updates=ON","--master_info_repository=TABLE","--relay_log_info_repository=TABLE","--transaction_write_set_extraction=XXHASH64","--user=root","--skip-host-cache","--skip-name-resolve", "--default_authentication_plugin=mysql_native_password"]
+#    volumes: 
+#      - ./data/server-2:/var/lib/mysql      
+    restart: always
+    command: [
+      "mysqld",
+      "--server_id=2",
+      "--mysqlx=ON",
+      "--binlog_checksum=NONE",
+      "--gtid_mode=ON",
+      "--enforce_gtid_consistency=ON",
+      "--log_bin",
+      "--log_slave_updates=ON",
+      "--master_info_repository=TABLE",
+      "--relay_log_info_repository=TABLE",
+      "--transaction_write_set_extraction=XXHASH64",
+      "--user=root",
+      "--skip-host-cache",
+      "--skip-name-resolve", 
+      "--default_authentication_plugin=mysql_native_password",
+      "--binlog_transaction_dependency_tracking=WRITESET"]
 
-  mrs-server-3:
-    env_file:
-      - ./docker/mysql-server.env
-    image: mysql/mysql-server:8.0.12
+  mysql-server-3:
+    image: mysql/mysql-server
+    container_name: mysql-server-3
     user: root
+    environment: 
+      MYSQL_ROOT_PASSWORD: 'password'
+      MYSQL_ROOT_HOST: '%'
+    healthcheck:
+      test: ["CMD", "/healthcheck.sh"]
+      timeout: 20s
+      retries: 10
     ports:
       - "3303:3306"
-    command: ["mysqld","--server_id=3","--binlog_checksum=NONE","--gtid_mode=ON","--enforce_gtid_consistency=ON","--log_bin","--log_slave_updates=ON","--master_info_repository=TABLE","--relay_log_info_repository=TABLE","--transaction_write_set_extraction=XXHASH64","--user=root","--skip-host-cache","--skip-name-resolve", "--default_authentication_plugin=mysql_native_password"]
-  
-  mrs-router:
-    image: mysql/mysql-router:8.0
-    container_name: mrs-router-container
-    user: root
-    env_file:
-      - ./docker/mysql-router.env
+#    volumes: 
+#      - ./data/server-3:/var/lib/mysql      
+    restart: always
+    command: [
+      "mysqld",
+      "--server_id=3",
+      "--mysqlx=ON",
+      "--binlog_checksum=NONE",
+      "--gtid_mode=ON",
+      "--enforce_gtid_consistency=ON",
+      "--log_bin",
+      "--log_slave_updates=ON",
+      "--master_info_repository=TABLE",
+      "--relay_log_info_repository=TABLE",
+      "--transaction_write_set_extraction=XXHASH64",
+      "--user=root",
+      "--skip-host-cache",
+      "--skip-name-resolve", 
+      "--default_authentication_plugin=mysql_native_password",
+      "--binlog_transaction_dependency_tracking=WRITESET"]
+  mysql-router:
+    image: mysql/mysql-router
+    container_name: mysql-router
+    environment:
+      MYSQL_HOST: 'mysql-server-1'
+      MYSQL_PORT: 3306
+      MYSQL_USER: 'root'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_INNODB_NUM_MEMBERS: 3
+      MYSQL_CREATE_ROUTER_USER: 0
+      # MYSQL_ROUTER_BOOTSTRAP_EXTRA_OPTIONS="--extra-config /etc/mysqlrouter-custom/mysqlrouter.conf --ssl-mode DISABLED --client-ssl-mode DISABLED"
+      # MYSQL_ROUTER_BOOTSTRAP_EXTRA_OPTIONS="--force --extra-config /etc/mysqlrouter-custom/mysqlrouter.conf --client-ssl-mode PASSTHROUGH --server-ssl-ca /etc/mysqlrouter-custom/certificates/ca.pem --client-ssl-cert /etc/mysqlrouter-custom/certificates/server-cert.pem --client-ssl-key /etc/mysqlrouter-custom/certificates/server-key.pem"
     ports:
       - "8088:8088"
       - "6446:6446"
     volumes:
       - ./docker/mysql-router:/etc/mysqlrouter-custom
     depends_on:
-      - mrs-server-1
-      - mrs-server-2
-      - mrs-server-3
-      - mrs-shell
+      - mysql-server-1
+      - mysql-server-2
+      - mysql-server-3
+      - mysql-shell
     restart: on-failure
 
-  mrs-shell:
-    env_file:
-      - ./docker/mysql-shell.env
-    image: neumayer/mysql-shell-batch
+  mysql-shell:
+    image: norpac/mysql-shell
+    container_name: mysql-shell
+    # For interactive Mode. Used with: docker exec -it mysql-shell bash
+    # entrypoint: tail -f /dev/null
+    environment:
+      - MYSQL_USER=root
+      - MYSQL_HOST=mysql-server-1
+      - MYSQL_PORT=3306
+      - MYSQL_PASSWORD=password
+      - MYSQLSH_SCRIPT=/scripts/setupCluster.js
     volumes:
         - ./docker/scripts:/scripts
     depends_on:
-      - mrs-server-1
-      - mrs-server-2
-      - mrs-server-3
+      mysql-server-1:
+        condition: service_healthy
+      mysql-server-2:
+        condition: service_healthy
+      mysql-server-3:
+        condition: service_healthy
