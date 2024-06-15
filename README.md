@@ -1,3 +1,62 @@
+## Cluster recovery when new containers are introduced
+This section only applies to persisting data in the environment. If your using ephemeral mode, please disregard. 
+
+When a cluste is created, a unique Peer Id i.e. de0c0742d488:3306 is created for the database node. The problem 
+is that when a container is distroyed, the previous Peer Id will not be reassinged to the new container. 
+Thus, the cluster is broken and error messages will appear. i.e.:
+```
+[GCS] Error on opening a connection to peer node de0c0742d488:3306 when joining a group.
+```
+###
+To recover from this scnario two actions need to be taken:
+1. Remove the 'mysql_innodb_cluster_metadata' schema from each node
+2. Remove the mysqld-auto.cnf file from the root data directory
+
+##
+Removing the 'mysql_innodb_cluster_metadata'...
+- Gracefully shut down docker:
+```bash
+docker compose stop
+```
+- Run the mysql-shell in interactive mode. In the docker compose file, uncomment the following
+line: 
+```
+entrypoint: tail -f /dev/null
+```
+- Restart docker
+```bash
+docker compose up (or docker-compose up -d)
+```
+- Attach your console to the mysql-shell and run the following script:
+```bash
+docker exec -it mysql-shell bash
+bash-4.2# mysqlsh -f scripts/remove-metadata.js
+```
+- Gracefully shutdown docker
+```bash
+docker compose stop
+```
+- Run the mysql-shell in batch mode. In the docker compose file, comment the following
+line: 
+```
+# entrypoint: tail -f /dev/null
+```
+
+##
+Removing the mysqld-auto.cnf file from each server data directory...
+- Go to the utils/bat folder of this project and run:
+```bash
+featherweight_deploy\utils\bat>remove-cluster-config.bat
+```
+- Restart docker
+```bash
+docker compose up (or docker-compose up -d)
+```
+
+
+## Cert stuff
+
+
 ```bash
 openssl x509 -in docker/mysql-router/certs/server.crt -out docker/mysql-router/certs/server.crt.pem
 openssl rsa -in docker/mysql-router/certs/server.key -out docker/mysql-router/certs/server.key.pem

@@ -13,8 +13,8 @@ services:
       retries: 10
     ports:
       - "3301:3306"
-#    volumes: 
-#      - ./data/server-1:/var/lib/mysql      
+    volumes: 
+      - ./data/server-1:/var/lib/mysql      
     restart: always
     command: [
       "mysqld",
@@ -46,8 +46,8 @@ services:
       retries: 10
     ports:
       - "3302:3306"
-#    volumes: 
-#      - ./data/server-2:/var/lib/mysql      
+    volumes: 
+      - ./data/server-2:/var/lib/mysql      
     restart: always
     command: [
       "mysqld",
@@ -80,8 +80,8 @@ services:
       retries: 10
     ports:
       - "3303:3306"
-#    volumes: 
-#      - ./data/server-3:/var/lib/mysql      
+    volumes: 
+      - ./data/server-3:/var/lib/mysql      
     restart: always
     command: [
       "mysqld",
@@ -130,11 +130,15 @@ services:
     # For interactive Mode. Used with: docker exec -it mysql-shell bash
     # entrypoint: tail -f /dev/null
     environment:
+      # TODO: Use in mysqlsh
       - MYSQL_USER=root
-      - MYSQL_HOST=mysql-server-1
-      - MYSQL_PORT=3306
       - MYSQL_PASSWORD=password
-      - MYSQLSH_SCRIPT=/scripts/setupCluster.js
+      - MYSQL_HOST_1=mysql-server-1
+      - MYSQL_HOST_2=mysql-server-2
+      - MYSQL_HOST_3=mysql-server-3
+      - MYSQL_PORT_1=3306
+      - MYSQL_PORT_2=3306
+      - MYSQL_PORT_3=3306
     volumes:
         - ./docker/scripts:/scripts
     depends_on:
