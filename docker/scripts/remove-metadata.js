@@ -1,13 +1,15 @@
-const host1 = process.env.MYSQL_HOST_1
-const host2 = process.env.MYSQL_HOST_2
-const host3 = process.env.MYSQL_HOST_3
+// TODO: Discover how to use env vars (i.e. process.env...)
 
-const port1 = MYSQL_PORT_1
-const port2 = MYSQL_PORT_2
-const port3 = MYSQL_PORT_3
+const host1 = 'mysql-server-1'
+const host2 = 'mysql-server-2'
+const host3 = 'mysql-server-3'
 
-const username = process.env.MYSQL_USER
-const password = process.env.MYSQL_PASSWORD
+const port1 = '3306'
+const port2 = '3306'
+const port3 = '3306'
+
+const username = 'root'
+const password = 'password'
 
 function removeMetadata(host, port, user, password) {
 
@@ -23,6 +25,6 @@ function removeMetadata(host, port, user, password) {
     print(`Metadata removal failure ${e.message}`)
   }
 }
-removeMetadata(host1, port1, user, password)
-removeMetadata(host2, port2, user, password)
-removeMetadata(host3, port3, user, password)
+removeMetadata(host1, port1, username, password)
+removeMetadata(host2, port2, username, password)
+removeMetadata(host3, port3, username, password)

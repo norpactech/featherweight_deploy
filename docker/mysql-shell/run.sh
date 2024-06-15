@@ -1,3 +1,3 @@
 #!/bin/bash
-mysqlsh -f /scripts/create-cluster.js
+mysqlsh -f /scripts/manage-cluster.js
 exec "$@"
