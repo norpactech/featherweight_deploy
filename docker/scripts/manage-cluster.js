@@ -1,15 +1,15 @@
-// TODO: Discover how to use env vars (i.e. process.env...)
+var config = require('./config');
 
-const host1 = 'mysql-server-1'
-const host2 = 'mysql-server-2'
-const host3 = 'mysql-server-3'
+const host1 = config.MYSQL_HOST_1
+const host2 = config.MYSQL_HOST_2
+const host3 = config.MYSQL_HOST_3
 
-const port1 = '3306'
-const port2 = '3306'
-const port3 = '3306'
+const port1 = config.MYSQL_PORT_1
+const port2 = config.MYSQL_PORT_2
+const port3 = config.MYSQL_PORT_3
 
-const username = 'root'
-const password = 'password'
+const username = config.MYSQL_USERNAME
+const password = config.MYSQL_PASSWORD
 
 function healthCheck() {  
   var cluster = dba.getCluster()
@@ -30,7 +30,7 @@ function createCluster(clusterName) {
 function manageCluster() {
 
   print(`Connecting to ${host1}...\n`)
-  shell.connect(`${username}@${host1}:${port1}`, 'password')
+  shell.connect(`${username}@${host1}:${port1}`, password)
   print(`Connected\n`)
 
   try {

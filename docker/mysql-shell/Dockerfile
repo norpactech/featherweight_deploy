@@ -11,7 +11,6 @@ RUN rpmkeys --import $KEY \
     && yum install -y \
     $MYSQL_SHELL_PACKAGE_URL \
     && yum install bash -y \
-    && yum install vi -y \
     && yum clean all
 COPY run.sh /run.sh
 ENTRYPOINT ["/run.sh"]

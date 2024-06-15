@@ -1,3 +1,21 @@
+# ============================================================================
+#  Copyright 2024 Northern Pacific Technologies, LLC
+# 
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#  
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+# ============================================================================
+
+# For development and/or evaluation purposes only
+
 services:
 
   # docker exec -it mysql-server-1 bash  
@@ -13,6 +31,11 @@ services:
       retries: 10
     ports:
       - "3301:3306"
+    # Comment the following two lines for ephemeral mode. The data
+    # will henceforth reside only in the container for its lifetime.
+    # Once the container is deleted, the data will also be deleted.
+    # See README.md for persistant data recover is a container is 
+    # lost/deleted.
     volumes: 
       - ./data/server-1:/var/lib/mysql      
     restart: always
@@ -46,6 +69,11 @@ services:
       retries: 10
     ports:
       - "3302:3306"
+    # Comment the following two lines for ephemeral mode. The data
+    # will henceforth reside only in the container for its lifetime.
+    # Once the container is deleted, the data will also be deleted.
+    # See README.md for persistant data recover is a container is 
+    # lost/deleted.
     volumes: 
       - ./data/server-2:/var/lib/mysql      
     restart: always
@@ -80,6 +108,11 @@ services:
       retries: 10
     ports:
       - "3303:3306"
+    # Comment the following two lines for ephemeral mode. The data
+    # will henceforth reside only in the container for its lifetime.
+    # Once the container is deleted, the data will also be deleted.
+    # See README.md for persistant data recover is a container is 
+    # lost/deleted.
     volumes: 
       - ./data/server-3:/var/lib/mysql      
     restart: always
@@ -100,6 +133,7 @@ services:
       "--skip-name-resolve", 
       "--default_authentication_plugin=mysql_native_password",
       "--binlog_transaction_dependency_tracking=WRITESET"]
+
   mysql-router:
     image: mysql/mysql-router
     container_name: mysql-router
@@ -124,14 +158,27 @@ services:
       - mysql-shell
     restart: on-failure
 
+  # Note: For interactive Mode, uncomment the entrypoint.
+  #       This will allow for maintenance if your original
+  #       containers are lost and the databases are being 
+  #       persisted in data/server1..3. See README.md
+  #
+  #   Use:
+  #     1. docker exec -it mysql-shell bash
+  #     2. The container's /scripts/remove-metadata.sh
+  #        - Removes the mysql_innodb_cluster_metadata schemas
+  #          in each database (mysql-server1...3)
+  #     3. Use this project's utils/bat/remove-cluster-config.bat
+  #        - This removes the mysqld-auto.cnf files from each 
+  #          persisted database. See data/server-1...3
+
   mysql-shell:
     image: norpac/mysql-shell
     container_name: mysql-shell
-    # For interactive Mode. Used with: docker exec -it mysql-shell bash
     # entrypoint: tail -f /dev/null
     environment:
       # TODO: Use in mysqlsh
-      - MYSQL_USER=root
+      - MYSQL_USERNAME=root
       - MYSQL_PASSWORD=password
       - MYSQL_HOST_1=mysql-server-1
       - MYSQL_HOST_2=mysql-server-2

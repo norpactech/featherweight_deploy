@@ -1,28 +1,28 @@
-// TODO: Discover how to use env vars (i.e. process.env...)
+var config = require('./config');
 
-const host1 = 'mysql-server-1'
-const host2 = 'mysql-server-2'
-const host3 = 'mysql-server-3'
+const host1 = config.MYSQL_HOST_1
+const host2 = config.MYSQL_HOST_2
+const host3 = config.MYSQL_HOST_3
 
-const port1 = '3306'
-const port2 = '3306'
-const port3 = '3306'
+const port1 = config.MYSQL_PORT_1
+const port2 = config.MYSQL_PORT_2
+const port3 = config.MYSQL_PORT_3
 
-const username = 'root'
-const password = 'password'
+const username = config.MYSQL_USERNAME
+const password = config.MYSQL_PASSWORD
 
-function removeMetadata(host, port, user, password) {
+function removeMetadata(host, port, username, password) {
 
   try {
-    const connect = `${username}@${host1}:${port1}`
-    print(`Initiating connection: ${connect}`)
+    const connect = `${username}@${host}:${port}`
+    print(`Initiating connection: ${connect}\n`)
     shell.connect(connect, password)
-    print('Connection successfull')
+    print('Connection successfull\n')
     dba.dropMetadataSchema({force: true});
-    print('Metadata removal successfull')
+    print('Metadata removal successfull\n')
   }
   catch (e) {
-    print(`Metadata removal failure ${e.message}`)
+    print(`Metadata removal failure ${e.message}\n`)
   }
 }
 removeMetadata(host1, port1, username, password)

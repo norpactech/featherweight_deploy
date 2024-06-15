@@ -14,7 +14,7 @@ sed -i "s/{MYSQL_PORT_3}/$MYSQL_PORT_3/g" /scripts/config.js
 sed -i "s/{MYSQL_USERNAME}/$MYSQL_USERNAME/g" /scripts/config.js
 sed -i "s/{MYSQL_PASSWORD}/$MYSQL_PASSWORD/g" /scripts/config.js
 
-mysqlsh --js -f /scripts/manage-cluster.js
+mysqlsh --js -f /scripts/remove-metadata.js
 
 # Remove the username/password from the file system
 rm /scripts/config.js
