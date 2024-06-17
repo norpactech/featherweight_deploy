@@ -35,8 +35,8 @@ services:
     # Once the container is deleted, the data will also be deleted.
     # See README.md for persistant data recover is a container is 
     # lost/deleted.
-#    volumes: 
-#      - ./data/server-1:/var/lib/mysql      
+    volumes: 
+      - ./data/server-1:/var/lib/mysql      
     restart: always
     command: [
       "mysqld",
@@ -73,8 +73,8 @@ services:
     # Once the container is deleted, the data will also be deleted.
     # See README.md for persistant data recover is a container is 
     # lost/deleted.
-#    volumes: 
-#      - ./data/server-2:/var/lib/mysql      
+    volumes: 
+      - ./data/server-2:/var/lib/mysql      
     restart: always
     command: [
       "mysqld",
@@ -112,8 +112,8 @@ services:
     # Once the container is deleted, the data will also be deleted.
     # See README.md for persistant data recover is a container is 
     # lost/deleted.
-#    volumes: 
-#      - ./data/server-3:/var/lib/mysql      
+    volumes: 
+      - ./data/server-3:/var/lib/mysql      
     restart: always
     command: [
       "mysqld",
