@@ -18,7 +18,6 @@
 
 services:
 
-  # docker exec -it mysql-server-1 bash  
   mysql-server-1:
     image: mysql/mysql-server
     container_name: mysql-server-1
@@ -36,8 +35,8 @@ services:
     # Once the container is deleted, the data will also be deleted.
     # See README.md for persistant data recover is a container is 
     # lost/deleted.
-    volumes: 
-      - ./data/server-1:/var/lib/mysql      
+#    volumes: 
+#      - ./data/server-1:/var/lib/mysql      
     restart: always
     command: [
       "mysqld",
@@ -74,8 +73,8 @@ services:
     # Once the container is deleted, the data will also be deleted.
     # See README.md for persistant data recover is a container is 
     # lost/deleted.
-    volumes: 
-      - ./data/server-2:/var/lib/mysql      
+#    volumes: 
+#      - ./data/server-2:/var/lib/mysql      
     restart: always
     command: [
       "mysqld",
@@ -113,8 +112,8 @@ services:
     # Once the container is deleted, the data will also be deleted.
     # See README.md for persistant data recover is a container is 
     # lost/deleted.
-    volumes: 
-      - ./data/server-3:/var/lib/mysql      
+#    volumes: 
+#      - ./data/server-3:/var/lib/mysql      
     restart: always
     command: [
       "mysqld",
@@ -177,7 +176,6 @@ services:
     container_name: mysql-shell
     # entrypoint: tail -f /dev/null
     environment:
-      # TODO: Use in mysqlsh
       - MYSQL_USERNAME=root
       - MYSQL_PASSWORD=password
       - MYSQL_HOST_1=mysql-server-1
