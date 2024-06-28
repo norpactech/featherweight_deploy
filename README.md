@@ -30,8 +30,8 @@ Users are created in the system using the following, where:
  - [object] is the name of a table, etc...
 
 ```sql
-GRANT usage ON SCHEMA [api] TO apiuser;
-GRANT all ON [api].[object] to apiuser;
+GRANT usage ON SCHEMA [schema] TO apiuser;
+GRANT all ON [schema].[object] to apiuser;
 
 GRANT [username] TO authenticator;
 GRANT [username] TO webuser;
@@ -42,11 +42,4 @@ GRANT anonymous TO authenticator;
 
 http://localhost:9080/realms/featherweight/protocol/openid-connect/certs
 
-{
-  "keys": [
-    {
-      "kid": "HB00-HqsFadrc3INd22wnRxQl2PO_KsmaueC8bgIBEc",
-... 
-
-postrREST:
-  PGRST_JWT_SECRET: 'HB00-HqsFadrc3INd22wnRxQl2PO_KsmaueC8bgIBEc'
+PGRST_JWT_SECRET: [https://www.mathieupassenaud.fr/codeless_backend/](https://www.mathieupassenaud.fr/codeless_backend/)

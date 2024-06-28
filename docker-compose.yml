@@ -52,10 +52,10 @@ services:
     ports:
       - 3030:3000
     environment:
-      PGRST_DB_URI: postgres://root:password@postgres:5432/postgres
-      PGRST_DB_SCHEMA: norpac
-      PGRST_DB_ANON_ROLE: root
-      PGRST_JWT_SECRET: 'a5PtqapXcv9P_zIdyaBmfKEkNf6ixGa39kO9eGAEQ8o'
+      PGRST_DB_URI: postgres://root:password@postgres:5432/norpac
+      PGRST_DB_SCHEMA: public
+      PGRST_DB_ANON_ROLE: apiuser
+      PGRST_JWT_SECRET: '{"kty":"RSA","e":"AQAB","kid":"bf0b2e88-c1fc-4b8e-ad6d-9af614cf253a","n":"pMtv4iNzJRba7R9XZEo-yvppiR9Rt3dPrcOuC8mRrAa11hlcAIScAeKwEJ5qs_DxPOg2BO6U_YBG2yZhLGwQxZfKX53SeNt4vKyl95OMWjeTFFbx_39cqARyKbzMx3itfLMGzxTw3-nqwd4u9H5ks7G9rH1HmKN-BFNkNpz5N2U9jUbTmTBVO6T_Ziw_s_rvjN7iTIrq8X-_SNvs_qsjLRwlc-dg8fcnnCr3n0pB-XMRg3GL1CCZPWWKXepNrbJ5mIuHeEYqQ8TrtyBlnQWeVxOmFKoQxly-m9QK3j9cSwBJmXPc872SV9XjBjOERC9wm3pLTPQuKsDRU1yNLbTbZQ"}'
       PGRST_ROLE_CLAIM_KEY: '.resource_access.postgrestapi.roles[0]'
     depends_on:
       - postgres
