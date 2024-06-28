@@ -14,7 +14,8 @@
 #  limitations under the License.
 # ============================================================================
 
-# For development and/or evaluation purposes only
+# Disclaimer: For development and/or evaluation purposes only. Hardening is 
+#             the responsibility of the deploying organization.
 
 services:
   postgres:
@@ -49,11 +50,38 @@ services:
     container_name: postgREST
     restart: always
     ports:
-      - 3000:3000
+      - 3030:3000
     environment:
       PGRST_DB_URI: postgres://root:password@postgres:5432/postgres
       PGRST_DB_SCHEMA: norpac
       PGRST_DB_ANON_ROLE: root
+      PGRST_JWT_SECRET: 'HB00-HqsFadrc3INd22wnRxQl2PO_KsmaueC8bgIBEc'
+      PGRST_ROLE_CLAIM_KEY: '.resource_access.postgrestapi.roles[0]'
     depends_on:
       - postgres
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0.1
+    container_name: Keycloak
+    command: 'start-dev --import-realm'
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import
+      - ./keycloak/keycloak-health-check.sh:/opt/keycloak/health-check.sh
+    environment:
+      - KC_DB=dev-file
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_FEATURES=scripts
+      - KC_HTTP_PORT=9080
+      - KC_HTTPS_PORT=9443
+      - KC_HEALTH_ENABLED=true
+      - KC_HTTP_MANAGEMENT_PORT=9990
+    ports:
+      - 9080:9080
+      - 9443:9443
+    healthcheck:
+      test: 'bash /opt/keycloak/health-check.sh'
+      interval: 5s
+      timeout: 5s
+      retries: 40
+      start_period: 10s
