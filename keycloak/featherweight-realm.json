@@ -315,8 +315,8 @@
         },
         {
           "id": "f640ac1b-5837-4e1c-98a5-43775a6d81a6",
-          "name": "user",
-          "description": "Client Role, Admin",
+          "name": "apiuser",
+          "description": "Client Role, API User",
           "composite": false,
           "clientRole": true,
           "containerId": "f6ad761f-4790-4232-9d3e-f031f4d9c565",
@@ -448,7 +448,7 @@
       "realmRoles": [],
       "clientRoles": {
         "postgrestapi": [
-          "user"
+          "apiuser"
         ]
       }
     }

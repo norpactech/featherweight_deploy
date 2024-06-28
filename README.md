@@ -40,5 +40,13 @@ GRANT anonymous TO authenticator;
 
 ### Keycloak
 
-
 http://localhost:9080/realms/featherweight/protocol/openid-connect/certs
+
+{
+  "keys": [
+    {
+      "kid": "HB00-HqsFadrc3INd22wnRxQl2PO_KsmaueC8bgIBEc",
+... 
+
+postrREST:
+  PGRST_JWT_SECRET: 'HB00-HqsFadrc3INd22wnRxQl2PO_KsmaueC8bgIBEc'

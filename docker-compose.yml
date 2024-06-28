@@ -55,7 +55,7 @@ services:
       PGRST_DB_URI: postgres://root:password@postgres:5432/postgres
       PGRST_DB_SCHEMA: norpac
       PGRST_DB_ANON_ROLE: root
-      PGRST_JWT_SECRET: 'HB00-HqsFadrc3INd22wnRxQl2PO_KsmaueC8bgIBEc'
+      PGRST_JWT_SECRET: 'a5PtqapXcv9P_zIdyaBmfKEkNf6ixGa39kO9eGAEQ8o'
       PGRST_ROLE_CLAIM_KEY: '.resource_access.postgrestapi.roles[0]'
     depends_on:
       - postgres
